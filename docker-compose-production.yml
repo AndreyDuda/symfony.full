@@ -1,0 +1,14 @@
+version: '3'
+services:
+    manager-nginx:
+        image: $(REGITRY_ADDRESS)/manager-nginx:$(IMAGE_TAG)
+        restart: always
+        depends_on:
+          - manager-php-fpm
+        ports:
+        - "80:80"
+    manager-php-fpm:
+        image: $(REGITRY_ADDRESS)/manager-php-fpm:$(IMAGE_TAG)
+        restart: always
+    manager-php-cli:
+        image: $(REGITRY_ADDRESS)/manager-php-cli:$(IMAGE_TAG)
