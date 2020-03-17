@@ -2,7 +2,7 @@ version: '3'
 services:
     manager-nginx:
         build:
-            context: ./manager/docker/development
+            context: docker/development
             dockerfile: nginx.docker
         volumes:
             - ./manager:/app
@@ -12,7 +12,7 @@ services:
             - "8080:80"
     manager-php-fpm:
         build:
-            context: ./manager/docker/development
+            context: docker/development
             dockerfile: php-fpm.docker
         environment:
             APP_DEBUG: 1
@@ -20,9 +20,13 @@ services:
           - ./manager:/app
     manager-php-cli:
         build:
-            context: ./manager/docker/development
+            context: docker/development
             dockerfile: php-cli.docker
         environment:
             APP_DEBUG: 1
         volumes:
           - ./manager:/app
+          - composer:/root/.composer/cache
+
+volumes:
+    composer:
