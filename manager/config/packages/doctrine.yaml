@@ -1,5 +1,15 @@
+parameters:
+    env(DATABASE_URL): ''
+
 doctrine:
     dbal:
+        driver: 'pdo_pgsql'
+        server_version: '11.2'
+        charset: utf8
+        default_table_options:
+            charset: utf8
+            collate: --
+
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,
@@ -7,7 +17,7 @@ doctrine:
         #server_version: '5.7'
     orm:
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
             App:
