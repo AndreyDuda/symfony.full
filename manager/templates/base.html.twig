@@ -1,65 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
-   {# <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="centrifugo-url" content="{{ centrifugo_url }}">
-    <meta name="centrifugo-user" content="{{ app.user.id }}">
-    <meta name="centrifugo-token" content="{{ centrifugo_token() }}">#}
     <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    {% block stylesheets %}
-       {# {{ encore_entry_link_tags('app') }}#}
-    {% endblock %}
+    <style>
+        main > .container {
+            padding: 80px 15px 0;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+        }
+
+        .footer > .container {
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .controls > * {
+            margin-right: 4px;
+        }
+        .controls > *:last-child {
+            margin-right: 0;
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-<header class="app-header navbar">
-    <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="{{ path('home') }}">
-        <img class="navbar-brand-full" src="/logo.png" width="90" height="25" alt="Logo">
-    </a>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="nav navbar-nav ml-auto mr-4">
-        <li class="nav-item dropdown">
-            <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                {#{{ app.user.display }}#}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-header text-center">
-                    <strong>Account</strong>
-                </div>
-               {# <a class="dropdown-item" href="{{ path('profile') }}"><i class="fa fa-user"></i> Profile</a>
-                <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fa fa-lock"></i> Logout</a>#}
+<body class="d-flex flex-column h-100">
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="{{ path('home') }}">App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('home') }}">Home</a>
+                    </li>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('post_index') }}">Posts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">Sing In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Log In</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
-        </li>
-    </ul>
-</header>
-<div class="app-body">
-    <div class="sidebar">
-        <nav class="sidebar-nav">
-           {# {{ knp_menu_render('sidebar', {'currentClass': 'active'}) }}#}
-        </nav>
-        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-    </div>
-    <main class="main">
-        {% block breadcrumbs %}{% endblock %}
-        <div class="container-fluid">
-           {# {% include '_flashes.html.twig' %}#}
-            {% block body %}{% endblock %}
         </div>
-    </main>
-</div>
-<footer class="app-footer">
-    <div>
-        <span>© {{ "now"|date("Y") }} All rights reserved</span>
+    </nav>
+</header>
+
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        {% block breadcrumbs %}{% endblock %}
+        {% block body %}{% endblock %}
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <span class="text-muted">App</span>
     </div>
 </footer>
-{% block javascripts %}
-   {# {{ encore_entry_script_tags('app') }}#}
-{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+{% block javascripts %}{% endblock %}
 </body>
 </html>

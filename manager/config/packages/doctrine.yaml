@@ -8,7 +8,8 @@ doctrine:
         charset: utf8
         default_table_options:
             charset: utf8
-            collate: --
+            schema: public
+            collate: null
 
         url: '%env(resolve:DATABASE_URL)%'
 
