@@ -106,6 +106,9 @@
       <path value="$PROJECT_DIR$/manager/vendor/zendframework/zend-code" />
       <path value="$PROJECT_DIR$/manager/vendor/phpdocumentor/reflection-docblock" />
       <path value="$PROJECT_DIR$/manager/vendor/zendframework/zend-eventmanager" />
+      <path value="$PROJECT_DIR$/manager/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/manager/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/manager/vendor/ramsey/collection" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
