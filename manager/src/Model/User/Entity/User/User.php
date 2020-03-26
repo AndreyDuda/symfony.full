@@ -20,21 +20,45 @@ class User
     private $confirmToken;
     /** @var string  */
     private $status;
+    /** @var string */
+    private $network;
+    /** @var string */
+    private $indentity;
 
-    public function __construct(
+    public static function signUpByEmail(
         Id $id,
         \DateTimeImmutable $date,
         Email $email,
         string $hash,
         string $token
-    )
+    ): User
     {
-        $this->id = $id;
-        $this->date = $date;
-        $this->email = $email;
-        $this->passwordHash = $hash;
-        $this->confirmToken = $token;
-        $this->status = self::STATUS_WAIT;
+        $user = new self();
+        $user->id = $id;
+        $user->date = $date;
+        $user->email = $email;
+        $user->passwordHash = $hash;
+        $user->confirmToken = $token;
+        $user->status = self::STATUS_WAIT;
+
+        return $user;
+    }
+
+    public static function signUpNetWork(
+        Id $id,
+        \DateTimeImmutable $date,
+        string $network,
+        string $indentity
+    ): User
+    {
+        $user = new self();
+        $user->id = $id;
+        $user->date = $date;
+        $user->network = $network;
+        $user->indentity = $indentity;
+        $user->status = self::STATUS_WAIT;
+
+        return $user;
     }
 
     public function isWait(): bool
@@ -49,7 +73,11 @@ class User
 
     public function confirmSingUp(): void
     {
+        if (!$this->isWait()) {
+            throw new \DomainException('User is already confirmed.');
+        }
         $this->status = self::STATUS_ACTIVE;
+        $this->confirmToken = null;
     }
 
     public function getId(): Id
