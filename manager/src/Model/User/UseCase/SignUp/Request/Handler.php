@@ -7,21 +7,31 @@ use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
+use App\Model\User\Service\ConfirmTokenizer;
+use App\Model\User\Service\ConfirmTokenSender;
 use App\Model\User\Service\Flusher;
 use App\Model\User\Service\PasswordHasher;
-use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Uuid;
 
 class Handler
 {
     private $users;
     private $hasher;
+    private $tokenizer;
+    private $sender;
     private $flusher;
 
-    public function __construct(UserRepository $user, PasswordHasher $hasher, Flusher $flusher)
+    public function __construct(
+        UserRepository $user,
+        PasswordHasher $hasher,
+        ConfirmTokenizer $tokenizer,
+        ConfirmTokenSender $sender,
+        Flusher $flusher
+    )
     {
         $this->users = $user;
         $this->hasher = $hasher;
+        $this->tokenizer = $tokenizer;
+        $this->sender = $sender;
         $this->flusher = $flusher;
     }
 
@@ -37,9 +47,12 @@ class Handler
             Id::next(),
             new \DateTimeImmutable(),
             $email,
-            $this->hasher->hash($command->password)
+            $this->hasher->hash($command->password),
+            $token = $this->tokenizer->generate()
         );
 
         $this->users->add($user);
+        $this->sender->send($email, $token);
+        $this->flusher->flush();
     }
 }
