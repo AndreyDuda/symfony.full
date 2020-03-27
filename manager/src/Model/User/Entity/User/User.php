@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model\User\Entity\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class User
 {
     private const STATUS_WAIT = 'wait';
     private const STATUS_ACTIVE = 'active';
+    private const STATUS_NEW = NULL;
 
     /** @var Id */
     private $id;
@@ -21,44 +24,60 @@ class User
     /** @var string  */
     private $status;
     /** @var string */
-    private $network;
-    /** @var string */
+    private $networks;
+    /** @var Network[]|ArrayCollection */
     private $indentity;
 
-    public static function signUpByEmail(
-        Id $id,
-        \DateTimeImmutable $date,
+    public function __construct(Id $id, \DateTimeImmutable $date)
+    {
+        $this->id = $id;
+        $this->date = $date;
+        $this->status = self::STATUS_NEW;
+        $this->networks = new ArrayCollection();
+    }
+
+    public function signUpByEmail(
         Email $email,
         string $hash,
         string $token
-    ): User
+    ): void
     {
-        $user = new self();
-        $user->id = $id;
-        $user->date = $date;
-        $user->email = $email;
-        $user->passwordHash = $hash;
-        $user->confirmToken = $token;
-        $user->status = self::STATUS_WAIT;
-
-        return $user;
+        if (!$this->isNew()) {
+            throw new \DomainException('User is already signed up.');
+        }
+        $this->email = $email;
+        $this->passwordHash = $hash;
+        $this->confirmToken = $token;
+        $this->status = self::STATUS_WAIT;
     }
 
-    public static function signUpNetWork(
-        Id $id,
-        \DateTimeImmutable $date,
+    public function signUpNetWork(
         string $network,
         string $indentity
-    ): User
+    ): void
     {
-        $user = new self();
-        $user->id = $id;
-        $user->date = $date;
-        $user->network = $network;
-        $user->indentity = $indentity;
-        $user->status = self::STATUS_WAIT;
+        if (!$this->isNew()) {
+            throw new \DomainException('User is already signed up.');
+        }
+        $this->network = $network;
+        $this->indentity = $indentity;
+        $this->attachNetwork($network, $indentity);
+        $this->status = self::STATUS_WAIT;
+    }
 
-        return $user;
+    private function attachNetwork(string $network, string $identity): void
+    {
+        foreach ($this->networks as $existing) {
+            if ($existing->isForeNetwork($network)) {
+                throw new \DomainException('Network is already attached');
+            }
+        }
+        $this->networks->add(new Network($this, $network, $identity));
+    }
+
+    public function isNew(): bool
+    {
+        return $this->status == self::STATUS_NEW;
     }
 
     public function isWait(): bool
