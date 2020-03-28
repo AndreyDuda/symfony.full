@@ -15,18 +15,18 @@ class User
     private $id;
     /** @var \DateTimeImmutable  */
     private $date;
-    /** @var Email  */
+    /** @var Email|null  */
     private $email;
-    /** @var string  */
+    /** @var string|null  */
     private $passwordHash;
     /** @var string|null  */
     private $confirmToken;
-    /** @var string  */
+    /** @var ResetToken|null  */
+    private $resetToken;
+    /** @var string|null */
     private $status;
-    /** @var string */
-    private $networks;
     /** @var Network[]|ArrayCollection */
-    private $indentity;
+    private $networks;
 
     public function __construct(Id $id, \DateTimeImmutable $date)
     {
@@ -53,26 +53,58 @@ class User
 
     public function signUpNetWork(
         string $network,
-        string $indentity
+        string $identity
     ): void
     {
         if (!$this->isNew()) {
             throw new \DomainException('User is already signed up.');
         }
-        $this->network = $network;
-        $this->indentity = $indentity;
-        $this->attachNetwork($network, $indentity);
-        $this->status = self::STATUS_WAIT;
+        $this->attachNetwork($network, $identity);
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    public function confirmSignUp(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('User is already confirmed.');
+        }
+
+        $this->status = self::STATUS_ACTIVE;
+        $this->confirmToken = null;
     }
 
     private function attachNetwork(string $network, string $identity): void
     {
         foreach ($this->networks as $existing) {
-            if ($existing->isForeNetwork($network)) {
-                throw new \DomainException('Network is already attached');
+            if ($existing->isForNetwork($network)) {
+                throw new \DomainException('Network is already attached.');
             }
         }
         $this->networks->add(new Network($this, $network, $identity));
+    }
+
+    public function requestPasswordReset(ResetToken $token, \DateTimeImmutable $date): void
+    {
+        if (!$this->email) {
+            throw new \DomainException('Email is not specified');
+        }
+        if ($this->resetToken && !$this->resetToken->isExpiredTo($date)) {
+            throw new \DomainException('Resetting is already request');
+        }
+
+        $this->resetToken = $token;
+    }
+
+    public function passwordReset(\DateTimeImmutable $date, string $hash): void
+    {
+        if (!$this->resetToken) {
+            throw new \DomainException('Resetting is not requested.');
+        }
+        if ($this->resetToken->isExpiredTo($date)) {
+            throw new \DomainException('Reset token is expired.');
+        }
+        $this->passwordHash = $hash;
+        $this->resetToken = null;
     }
 
     public function isNew(): bool
@@ -88,6 +120,11 @@ class User
     public function isActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function getResetToken(): ?ResetToken
+    {
+        return $this->resetToken;
     }
 
     public function confirmSingUp(): void
@@ -121,5 +158,13 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
+    }
+
+    /**
+     * @return Network[]
+     */
+    public function getNetworks(): array
+    {
+        return $this->networks->toArray();
     }
 }
