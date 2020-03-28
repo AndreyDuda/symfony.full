@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class ConfirmTest extends TestCase
 {
-    public function testSuccees(): void
+    public function testSuccess(): void
     {
         $user = $this->buildSignedUpUser();
 
-        $user->confirmSingUp();
+        $user->confirmSignUp();
 
         self::assertFalse($user->isWait());
         self::assertTrue($user->isActive());
@@ -26,19 +26,24 @@ class ConfirmTest extends TestCase
     {
         $user = $this->buildSignedUpUser();
 
-        $user->confirmSingUp();
+        $user->confirmSignUp();
         $this->expectExceptionMessage('User is already confirmed.');
-        $user->confirmSingUp();
+        $user->confirmSignUp();
     }
 
-    public function buildSignedUpUser(): User
+    private function buildSignedUpUser(): User
     {
-        return new User(
-            $id = Id::next(),
-            $data = new \DateTimeImmutable(),
-            $email = new Email('test@test.test'),
-            $hash = 'hash',
+        $user = new User(
+            Id::next(),
+            new \DateTimeImmutable()
+        );
+
+        $user->signUpByEmail(
+            new Email('test@app.test'),
+            'hash',
             $token = 'token'
         );
+
+        return $user;
     }
 }
