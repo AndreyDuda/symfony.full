@@ -51,6 +51,7 @@ class User
         $user->passwordHash = $hash;
         $user->confirmToken = $token;
         $user->status = self::STATUS_WAIT;
+        return $user;
     }
 
     public static function signUpNetWork(
@@ -63,6 +64,7 @@ class User
         $user = new self($id, $date);
         $user->attachNetwork($network, $identity);
         $user->status = self::STATUS_ACTIVE;
+        return $user;
     }
 
     public function confirmSignUp(): void
@@ -176,5 +178,10 @@ class User
     public function getNetworks(): array
     {
         return $this->networks->toArray();
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
     }
 }

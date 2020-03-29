@@ -51,32 +51,4 @@ class UserBuilder
         return $clone;
     }
 
-    public function build(): User
-    {
-        $user = new User(
-            $this->id,
-            $this->date
-        );
-
-        if ($this->email) {
-            $user->signUpByEmail(
-                $this->email,
-                $this->hash,
-                $this->token
-            );
-            if ($this->confirmed) {
-                $user->confirmSignUp();
-            }
-        }
-
-        if ($this->network) {
-            $user->signUpNetWork(
-                $this->network,
-                $this->identity
-            );
-        }
-
-        return $user;
-    }
-
 }

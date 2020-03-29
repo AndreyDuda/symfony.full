@@ -44,7 +44,11 @@ class RequestTest extends TestCase
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = $this->buildUser();
+        $user = User::signUpNetWork(
+            $id = Id::next(),
+            $date = new \DateTimeImmutable(), $network = 'vk',
+            $identity = '0000001'
+        );
 
         $this->expectExceptionMessage('Email is not specified');
         $user->requestPasswordReset($token, $now);
@@ -52,22 +56,14 @@ class RequestTest extends TestCase
 
     public function buildSignedUpByEmailUser(): User
     {
-        $user = $this->buildUser();
-
-        $user->signUpByEmail(
-            new Email('test@test.test'),
-            'hash',
-            $token = 'token'
+        $user = User::signUpByEmail(
+            $id = Id::next(),
+            $date = new \DateTimeImmutable(),
+            $email = new Email('test@teat.test'),
+            $hash = 'bash',
+            $token = 'Token'
         );
 
         return $user;
-    }
-
-    public function buildUser(): User
-    {
-        return new User(
-            Id::next(),
-            new \DateTimeImmutable()
-        );
     }
 }
