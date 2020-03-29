@@ -27,40 +27,42 @@ class User
     private $status;
     /** @var Network[]|ArrayCollection */
     private $networks;
+    /** @var Role  */
+    private $role;
 
-    public function __construct(Id $id, \DateTimeImmutable $date)
+    private function __construct(Id $id, \DateTimeImmutable $date)
     {
         $this->id = $id;
         $this->date = $date;
-        $this->status = self::STATUS_NEW;
+        $this->role = Role::user();
         $this->networks = new ArrayCollection();
     }
 
-    public function signUpByEmail(
+    public static function signUpByEmail(
+        Id $id,
+        \DateTimeImmutable $date,
         Email $email,
         string $hash,
         string $token
-    ): void
+    ): self
     {
-        if (!$this->isNew()) {
-            throw new \DomainException('User is already signed up.');
-        }
-        $this->email = $email;
-        $this->passwordHash = $hash;
-        $this->confirmToken = $token;
-        $this->status = self::STATUS_WAIT;
+        $user = new self($id, $date);
+        $user->email = $email;
+        $user->passwordHash = $hash;
+        $user->confirmToken = $token;
+        $user->status = self::STATUS_WAIT;
     }
 
-    public function signUpNetWork(
+    public static function signUpNetWork(
+        Id $id,
+        \DateTimeImmutable $date,
         string $network,
         string $identity
-    ): void
+    ): self
     {
-        if (!$this->isNew()) {
-            throw new \DomainException('User is already signed up.');
-        }
-        $this->attachNetwork($network, $identity);
-        $this->status = self::STATUS_ACTIVE;
+        $user = new self($id, $date);
+        $user->attachNetwork($network, $identity);
+        $user->status = self::STATUS_ACTIVE;
     }
 
     public function confirmSignUp(): void
@@ -105,6 +107,14 @@ class User
         }
         $this->passwordHash = $hash;
         $this->resetToken = null;
+    }
+
+    public function changeRole(Role $role):void
+    {
+        if ($this->role->isEqual($role)) {
+            throw new \DomainException('Role is already same.');
+        }
+        $this->role = $role;
     }
 
     public function isNew(): bool
