@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Entity\User;
+use App\Model\User\Entity\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,10 +93,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        /*throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);*/
-
         return new RedirectResponse($this->urlGenerator->generate('home'));
     }
 

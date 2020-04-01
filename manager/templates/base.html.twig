@@ -68,6 +68,7 @@
 <main role="main" class="flex-shrink-0">
     <div class="container">
         {% block breadcrumbs %}{% endblock %}
+        {% include '_flashes.html.twig' %}
         {% block body %}{% endblock %}
     </div>
 </main>
