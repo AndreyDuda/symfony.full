@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Auth;
 
+use App\Model\User\UserCase\SignUp;
 use App\Model\User\UserCase\SignUp\Request\Command;
 use App\Model\User\UserCase\SignUp\Request\Form;
-use App\Model\User\UserCase\SignUp\Request\Handler;
+use App\Model\User\UserCase\SignUp\Request\Handler as SignUpRequestHandler;
+use App\Model\User\UserCase\SignUp\Confirm\Handler as SignUpConfirmHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +29,7 @@ class SingUpController extends AbstractController
      * @param Handler $handler
      * @return Response
      */
-    public function request(Request $request, Handler $handler): Response
+    public function request(Request $request, SignUpRequestHandler $handler): Response
     {
         $command = new Command();
 
@@ -47,6 +49,29 @@ class SingUpController extends AbstractController
         return $this->render('app/auth/signup', [
             'form' => $form->createView()
         ]);
+
+    }
+
+    /**
+     * @Route("/signup/{token}", name="auth.signup.confirm")
+     * @param string $token
+     * @param SignUpConfirmHandler $handler
+     * @return Response
+     */
+    public function confirm(string $token, SignUpConfirmHandler $handler): Response
+    {
+        $command = new SignUp\Confirm\Command($token);
+
+
+        try {
+            $handler->handler($command);
+            $this->addFlash('success', 'Email is successfully confirmed.');
+            return $this->redirect('home');
+        } catch (\DomainException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('home');
+        }
 
     }
 }
