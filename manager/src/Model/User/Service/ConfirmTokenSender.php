@@ -9,8 +9,11 @@ use Symfony\Bundle\MonologBundle\SwiftMailer;
 
 class ConfirmTokenSender
 {
+    /** @var \Swift_Mailer  */
     private $mailer;
+    /** @var Environment  */
     private $twig;
+    /** @var array  */
     private $from;
 
     public function __construct(\Swift_Mailer $mailer, Environment $twig, array $from)
@@ -22,7 +25,7 @@ class ConfirmTokenSender
 
     public function send(Email $email, string $token): void
     {
-        $message = (new \Swift_Message('Sig Up Confirmation'))
+        $message = (new \Swift_Message('Sign Up Confirmation'))
             ->setFrom($this->from)
             ->setTo($email->getValue())
             ->setBody('mail/user/signup.html.twig', ['token' => $token], 'text/html');
