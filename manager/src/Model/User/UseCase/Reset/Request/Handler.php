@@ -33,7 +33,7 @@ class Handler
         $this->sender = $sender;
     }
 
-    public function handler(Command $command): void
+    public function handle(Command $command): void
     {
         $user = $this->user->getByEmail(new Email($command->email));
 

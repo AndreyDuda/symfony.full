@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class From extends AbstractType
+class Form extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
