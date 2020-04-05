@@ -1,18 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\User\Service;
 
 use App\Model\User\Entity\User\Email;
-use App\Model\User\Entity\User\ResetToken;
 use Twig\Environment;
 
-class ResetTokenSender
+class ConfirmTokenSender
 {
-    /** @var \Swift_Mailer  */
     private $mailer;
-    /** @var Environment  */
     private $twig;
 
     public function __construct(\Swift_Mailer $mailer, Environment $twig)
@@ -21,11 +17,11 @@ class ResetTokenSender
         $this->twig = $twig;
     }
 
-    public function send(Email $email, ResetToken $token): void
+    public function send(Email $email, string $token): void
     {
-        $message = (new \Swift_Message('Password resetting'))
+        $message = (new \Swift_Message('Sig Up Confirmation'))
             ->setTo($email->getValue())
-            ->setBody($this->twig->render('mail/user/reset.html.twig', [
+            ->setBody($this->twig->render('mail/user/signup.html.twig', [
                 'token' => $token
             ]), 'text/html');
 

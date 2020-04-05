@@ -40,6 +40,6 @@ services:
         tags:
             - { name: swiftmailer.default.plugin }
 
-    App\Conteiner\Model\User\Service\ResetTokenizer:
-        factory: 'App\Container\Model\User\service\ResetTokenizerFactory:create'
+    App\Model\User\Service\ResetTokenizer:
+        factory: 'App\Container\Model\User\Service\ResetTokenizerFactory:create'
         arguments: ['PT1H']

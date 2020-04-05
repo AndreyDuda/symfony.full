@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\User\UserCase\SignUp\Confirm;
+namespace App\Model\User\UseCase\SignUp\Confirm;
 
 class Command
 {

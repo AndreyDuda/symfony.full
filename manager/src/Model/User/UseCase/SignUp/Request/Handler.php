@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model\User\UseCase\SignUp\Request;
 
+use App\Model\User\Service\ConfirmTokenSender;
 use App\Model\User\Service\Flusher;
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
 use App\Model\User\Service\ConfirmTokenizer;
-use App\Model\User\Service\ResetTokenSender;
 use App\Model\User\Service\PasswordHasher;
-use App\Model\User\UserCase\SignUp\Request\Command;
+use App\Model\User\UseCase\SignUp\Request\Command;
 
 class Handler
 {
@@ -26,7 +26,7 @@ class Handler
         UserRepository $users,
         PasswordHasher $hasher,
         ConfirmTokenizer $tokenizer,
-        ResetTokenSender $sender,
+        ConfirmTokenSender $sender,
         Flusher $flusher
     )
     {
@@ -55,7 +55,7 @@ class Handler
 
         $this->users->add($user);
 
-        /*$this->sender->send($email, $this->tokenizer);*/
+        $this->sender->send($email, $token);
 
         $this->flusher->flush();
     }

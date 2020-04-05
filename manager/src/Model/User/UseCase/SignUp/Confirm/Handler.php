@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\User\UserCase\SignUp\Confirm;
+namespace App\Model\User\UseCase\SignUp\Confirm;
 
 use App\Model\User\Entity\User\UserRepository;
 use App\Model\User\Service\Flusher;
@@ -19,7 +19,7 @@ class Handler
         $this->flusher = $flusher;
     }
 
-    public function handler(Command $command): void
+    public function handle(Command $command): void
     {
         if (!$user = $this->user->findByConfirmToken($command->token)) {
             throw new \DomainException('Incorrect or confirmed token.');

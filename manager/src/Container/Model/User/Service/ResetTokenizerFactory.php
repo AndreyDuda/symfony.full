@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Conteiner\Model\User\Service;
+namespace App\Container\Model\User\Service;
 
 use App\Model\User\Service\ResetTokenizer;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Auth;
 
 use App\Model\User\UseCase\SignUp\Request\Handler;
-use App\Model\User\UserCase\SignUp;
+use App\Model\User\UseCase\SignUp;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,8 +52,6 @@ class SignUpController extends AbstractController
 
     /**
      * @Route("/signup/{token}", name="auth.signup.confirm")
-     * @param string $token
-     * @param SignUp\Confirm\Handler $handler
      * @return Response
      */
     public function confirm(string $token, SignUp\Confirm\Handler $handler): Response
