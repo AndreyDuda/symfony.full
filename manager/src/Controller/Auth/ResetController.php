@@ -47,7 +47,7 @@ class ResetController extends AbstractController
     }
 
     /**
-     * @Route("/reset/{token}", name=""auth.reset.reset)
+     * @Route("/reset/{token}", name="auth.reset.reset")
      * @param string $token
      * @param Request $request
      * @param Reset\Reset\Handler $handler

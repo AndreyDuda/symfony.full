@@ -48,4 +48,4 @@ class ResetToken
     {
         return empty($this->token);
     }
-}
+}//e572ab1ffb692b76470fb47810197ee75db10c3d
