@@ -93,6 +93,9 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "finesse/swiftmailer-defaults-plugin": {
+        "version": "v2.0.3"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

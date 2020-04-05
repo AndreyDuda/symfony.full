@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Auth;
 
 use App\Model\User\UserCase\Reset;
+use App\ReadModel\User\UserFetcher;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class ResetController extends AbstractController
                 $this->addFlash('error', $e->getMessage());
             }
         }
-        return $this->render('app/auth/reset/request', ['form' => $form->createView()]);
+        return $this->render('app/auth/reset/request.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -55,9 +56,15 @@ class ResetController extends AbstractController
     public function reset(
         string $token,
         Request $request,
-        Reset\Reset\Handler $handler
+        Reset\Reset\Handler $handler,
+        UserFetcher $users
     ): Response
     {
+        if (!$users->existsByResetToken($token)) {
+            $this->addFlash('error', 'Incorrect or already confirmed token');
+            return $this->redirectToRoute('home');
+        }
+
         $command = new Reset\Reset\Command($token);
 
         $form = $this->createForm(Reset\Reset\Form::class);
@@ -73,7 +80,10 @@ class ResetController extends AbstractController
                 $this->addFlash('error', $e->getMessage());
             }
         }
-        return $this->render('app/auth/reset/reset', ['form' => $form->createView()]);
+        return $this->render(
+            'app/auth/reset/reset.html.twig',
+            ['form' => $form->createView()]
+        );
     }
 
 }

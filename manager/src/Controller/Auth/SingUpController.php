@@ -48,7 +48,7 @@ class SingUpController extends AbstractController
             }
         }
 
-        return $this->render('app/auth/signup', [
+        return $this->render('app/auth/signup.html.twig', [
             'form' => $form->createView()
         ]);
 
