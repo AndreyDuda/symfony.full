@@ -109,6 +109,9 @@
       <path value="$PROJECT_DIR$/manager/vendor/brick/math" />
       <path value="$PROJECT_DIR$/manager/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/manager/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/manager/vendor/swiftmailer/swiftmailer" />
+      <path value="$PROJECT_DIR$/manager/vendor/symfony/swiftmailer-bundle" />
+      <path value="$PROJECT_DIR$/manager/vendor/finesse/swiftmailer-defaults-plugin" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

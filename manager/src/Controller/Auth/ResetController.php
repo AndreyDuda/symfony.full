@@ -23,11 +23,15 @@ class ResetController extends AbstractController
     /**
      * @Route("/reset", name="auth.reset")
      * @param Request $request
-     * @param Handler $handler
+     * @param Reset\Request\Handler $handler
      * @return Response
      */
-    public function request(Request $request, Reset\Request\Handler $handler): Response
+    public function request(string $token, Request $request, Reset\Request\Handler $handler, UserFetcher $users): Response
     {
+        if (!$users->existsByResetToken($token)) {
+            $this->addFlash('error', 'Incorrect or already confirmed token.');
+            return $this->redirectToRoute('home');
+        }
         $command = new Reset\Request\Command();
 
         $form = $this->createForm(Reset\Request\Form::class, $command);
@@ -37,7 +41,7 @@ class ResetController extends AbstractController
             try {
                 $handler->handle($command);
                 $this->addFlash('success', 'Check your email');
-                return $this->redirectToRoute('/');
+                return $this->redirectToRoute('home');
             } catch (\DomainException $e) {
                 $this->logger->error($e->getMessage(), ['exeption' => $e]);
                 $this->addFlash('error', $e->getMessage());

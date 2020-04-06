@@ -17,7 +17,6 @@ class Command
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Lenght(min=6)
      */
     public $password;
 

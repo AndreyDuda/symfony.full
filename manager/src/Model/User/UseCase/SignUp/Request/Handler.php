@@ -1,16 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-namespace App\Model\User\UserCase\SignUp\Request;
+namespace App\Model\User\UseCase\SignUp\Request;
 
+use App\Model\User\Service\Flusher;
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
 use App\Model\User\Service\ConfirmTokenizer;
-use App\Model\User\Service\ConfirmTokenSender;
-use App\Model\User\Service\Flusher;
+use App\Model\User\Service\ResetTokenSender;
 use App\Model\User\Service\PasswordHasher;
+use App\Model\User\UserCase\SignUp\Request\Command;
 
 class Handler
 {
@@ -21,21 +23,21 @@ class Handler
     private $flusher;
 
     public function __construct(
-        UserRepository $user,
+        UserRepository $users,
         PasswordHasher $hasher,
         ConfirmTokenizer $tokenizer,
-        ConfirmTokenSender $sender,
+        ResetTokenSender $sender,
         Flusher $flusher
     )
     {
-        $this->users = $user;
+        $this->users = $users;
         $this->hasher = $hasher;
         $this->tokenizer = $tokenizer;
         $this->sender = $sender;
         $this->flusher = $flusher;
     }
 
-    public function handler(Command $command): void
+    public function handle(Command $command): void
     {
         $email = new Email($command->email);
 
@@ -52,7 +54,9 @@ class Handler
         );
 
         $this->users->add($user);
-        $this->sender->send($email, $token);
+
+        /*$this->sender->send($email, $this->tokenizer);*/
+
         $this->flusher->flush();
     }
 }
