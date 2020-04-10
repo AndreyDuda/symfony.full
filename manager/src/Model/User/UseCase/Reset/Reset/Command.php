@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\User\UserCase\Reset\Reset;
+namespace App\Model\User\UseCase\Reset\Reset;
 
 class Command
 {

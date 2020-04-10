@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\User\UserCase\Reset\Request;
+namespace App\Model\User\UseCase\Reset\Request;
 
-use App\Model\User\Entity\User\EmailType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
