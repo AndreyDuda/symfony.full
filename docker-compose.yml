@@ -38,6 +38,11 @@ services:
         ports:
           - '54321:5432'
 
+    mailer:
+        image: mailhog/mailhog
+        ports:
+            - "8081:8025"
+
 volumes:
     manager-postgres:
     composer:
