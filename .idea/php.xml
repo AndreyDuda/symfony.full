@@ -112,6 +112,8 @@
       <path value="$PROJECT_DIR$/manager/vendor/swiftmailer/swiftmailer" />
       <path value="$PROJECT_DIR$/manager/vendor/symfony/swiftmailer-bundle" />
       <path value="$PROJECT_DIR$/manager/vendor/finesse/swiftmailer-defaults-plugin" />
+      <path value="$PROJECT_DIR$/manager/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/manager/vendor/doctrine/doctrine-fixtures-bundle" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

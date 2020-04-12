@@ -8,8 +8,10 @@
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/collections" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/common" />
+      <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/data-fixtures" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/dbal" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/doctrine-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/doctrine-fixtures-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/doctrine-migrations-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/event-manager" />
       <excludeFolder url="file://$MODULE_DIR$/manager/vendor/doctrine/inflector" />
